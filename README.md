@@ -1,6 +1,6 @@
 # US 10-Year Tax Reform Cost Calculator
 
-A simple application to calculate 10-year budgetary costs for tax reforms.
+A simple application to calculate 10-year budgetary costs for tax reforms. 
 
 ## Structure
 
