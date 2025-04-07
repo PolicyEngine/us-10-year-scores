@@ -72,7 +72,7 @@ export default function Home() {
         reform: formData.reform ? JSON.parse(formData.reform) : null
       };
       
-      const response = await axios.post('http://localhost:8000/calculate-cost/', submissionData);
+      const response = await axios.post('/api/calculate-cost/', submissionData);
       
       setResults(response.data);
     } catch (err) {
