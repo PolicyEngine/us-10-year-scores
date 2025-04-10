@@ -3,9 +3,18 @@ from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 from policyengine import Simulation, SimulationOptions
 import os
+from enum import Enum
+
+class DataSource(str, Enum):
+    CPS = "cps"
+    ECPS = "ecps"
+
+ENHANCED_CPS = "hf://policyengine/policyengine-us-data/enhanced_cps_2024.h5"
+CPS = "hf://policyengine/policyengine-us-data/cps_2023.h5"
 
 class CostingOptions(SimulationOptions):
     budget_window: int = 10
+    dataset: DataSource = DataSource.CPS
 
 api = APIRouter()
 app = FastAPI(
@@ -25,7 +34,6 @@ app.add_middleware(
 
 @api.post("/api/calculate-cost/")
 def calculate_cost(request: CostingOptions):
-    print("Hello!")
     request_data = request.model_dump()
     
     # Get budget window size (default to 10 if not provided)
@@ -37,9 +45,18 @@ def calculate_cost(request: CostingOptions):
     state_revenue_impacts = []
     benefit_spending_impacts = []
 
+    # Get dataset choice
+    dataset = request_data.get("dataset", "cps")
+
+    dataset = {
+        "cps": CPS,
+        "ecps": ENHANCED_CPS,
+    }.get(dataset, CPS)  # Default to CPS if not found
+    
     for year in range(start_year, start_year + budget_window):
-        print("Calculating for year:", year)
+        print(f"Calculating for year {year} using dataset {dataset}")
         request_data["time_period"] = year
+        request_data["data"] = dataset  # Ensure dataset is passed to simulation
         simulation = Simulation(**request_data)
         result = simulation.calculate_economy_comparison().budget
         

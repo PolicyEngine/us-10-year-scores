@@ -12,6 +12,7 @@ export default function Home() {
     region: '',
     subsample: '',
     budget_window: '10',
+    dataset: 'cps',
     reform: '{"gov.hmrc.income_tax.rates.uk[0].rate": 0.19}'
   });
   const [results, setResults] = useState(null);
@@ -128,6 +129,20 @@ export default function Home() {
                   min="1"
                   max="20"
                 />
+              </div>
+
+              <div className="form-group">
+                <label htmlFor="dataset">Dataset:</label>
+                <select 
+                  id="dataset" 
+                  name="dataset" 
+                  value={formData.dataset} 
+                  onChange={handleChange}
+                  required
+                >
+                  <option value="cps">CPS</option>
+                  <option value="ecps">ECPS</option>
+                </select>
               </div>
 
               <input
