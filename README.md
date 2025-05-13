@@ -41,7 +41,7 @@ To stop all services:
 make clean
 ```
 
-## Commands
+## Commands 
 
 - `make install`: Install all dependencies
 - `make backend`: Start only the backend server
